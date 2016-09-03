@@ -43,5 +43,12 @@
         <artifactId>jersey-server</artifactId>
         <version>1.8</version>
     </dependency>
+    <dependency>
+        <groupId>net.sf.jfuzzylogic</groupId>
+        <artifactId>jfuzzylogic</artifactId>
+        <scope>system</scope>
+        <version>2.1</version>
+        <systemPath>${project.basedir}/WebContent/WEB-INF/lib/jFuzzyLogic.jar</systemPath>
+    </dependency>
 </dependencies>
 </project>
