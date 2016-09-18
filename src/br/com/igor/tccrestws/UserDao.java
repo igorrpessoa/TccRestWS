@@ -7,50 +7,55 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-   public Usuarios getAllUsers(){
+   public User getAllUsers(){
       List<User> userList = null;
+      User user = null;
       try {
-         File file = new File("Users.dat");
-         if (!file.exists()) {
-            User user = new User(1, "Mahesh", "Teacher");
-            userList = new ArrayList<User>();
-            userList.add(user);
-            saveUserList(userList);		
-         }
-         else{
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            userList = (List<User>) ois.readObject();
-            ois.close();
-         }
-      } catch (IOException e) {
-         e.printStackTrace();
-      } catch (ClassNotFoundException e) {
+    	  ConexaoMySQL conMySQL = new ConexaoMySQL();
+    	  Connection conn = conMySQL.getConexaoMySQL();
+    	  System.out.println("Creating statement...");
+    	  Statement stmt = (Statement) conn.createStatement();
+    	  String sql;
+          sql = "select * from tcc.user";
+          ResultSet rs = stmt.executeQuery(sql);
+          
+          //STEP 5: Extract data from result set
+          while(rs.next()){
+             //Retrieve by column name
+             int id  = rs.getInt("id");
+             int idade = rs.getInt("idade");
+             String nome = rs.getString("nome");
+             String profissao = rs.getString("profissao");
+             user = new User(id, nome, profissao);
+             userList.add(user);
+          }
+          //STEP 6: Clean-up environment
+          rs.close();
+          stmt.close();
+          conn.close();
+          
+          userList = new ArrayList<User>();
+         
+          saveUserList(userList);		
+
+      } catch (Exception e) {
          e.printStackTrace();
       }
-      Usuarios u = new Usuarios();
-      u.setLista(userList);
-      return u;
+      return user;
    }
 
    private void saveUserList(List<User> userList){
       try {
-         File file = new File("Users.dat");
-         FileOutputStream fos;
-
-         fos = new FileOutputStream(file);
-
-         ObjectOutputStream oos = new ObjectOutputStream(fos);
-         oos.writeObject(userList);
-         oos.close();
-      } catch (FileNotFoundException e) {
+    	  
+      } catch (Exception e) {
          e.printStackTrace();
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
+      } 
    }   
 }
