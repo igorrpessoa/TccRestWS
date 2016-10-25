@@ -50,5 +50,10 @@
         <version>2.1</version>
         <systemPath>${project.basedir}/WebContent/WEB-INF/lib/jFuzzyLogic.jar</systemPath>
     </dependency>
+    <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.39</version>
+</dependency>
 </dependencies>
 </project>

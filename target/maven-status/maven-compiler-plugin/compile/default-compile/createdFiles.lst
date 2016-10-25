@@ -1,5 +1,5 @@
 br\com\igor\tccrestws\UserService.class
 br\com\igor\tccrestws\User.class
 br\com\igor\tccrestws\Fuzzy.class
-br\com\igor\tccrestws\Usuarios.class
+br\com\igor\tccrestws\ConexaoMySQL.class
 br\com\igor\tccrestws\UserDao.class

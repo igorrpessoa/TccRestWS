@@ -26,24 +26,12 @@
     <artifactId>gson</artifactId>
     <version>2.7</version>
 	</dependency>
-	<dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-server</artifactId>
-        <version>1.8</version>
-    </dependency>
     <!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-core -->
 	<dependency>
 	    <groupId>com.sun.jersey</groupId>
 	    <artifactId>jersey-core</artifactId>
 	    <version>1.8</version>
 	</dependency>
-    <!-- https://mvnrepository.com/artifact/com.sun.jersey/jersey-json -->
-	<dependency>
-	    <groupId>com.sun.jersey</groupId>
-	    <artifactId>jersey-json</artifactId>
-	    <version>1.8</version>
-	</dependency>
-    
 	<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
 	<dependency>
     <groupId>javax.servlet</groupId>
@@ -51,17 +39,28 @@
     <version>3.0.1</version>
     <scope>provided</scope>
 </dependency>
+<!-- <dependency> -->
+<!--         <groupId>net.sf.jfuzzylogic</groupId> -->
+<!--         <artifactId>jfuzzylogic</artifactId> -->
+<!--         <scope>system</scope> -->
+<!--         <version>2.1</version> -->
+<!--         <systemPath>${project.basedir}/WebContent/WEB-INF/lib/jFuzzyLogic.jar</systemPath> -->
+<!--     </dependency> -->
+<!-- <dependency> -->
+<!--     <groupId>net.sourceforge.jfuzzylogic</groupId> -->
+<!--     <artifactId>jFuzzyLogic</artifactId> -->
+<!--     <version>1.2.1</version> -->
+<!-- </dependency> -->
 <dependency>
     <groupId>javax.ws.rs</groupId>
     <artifactId>javax.ws.rs-api</artifactId>
     <version>2.0</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 <dependency>
-        <groupId>net.sf.jfuzzylogic</groupId>
-        <artifactId>jfuzzylogic</artifactId>
-        <scope>system</scope>
-        <version>2.1</version>
-        <systemPath>${project.basedir}/WebContent/WEB-INF/lib/jFuzzyLogic.jar</systemPath>
-    </dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.39</version>
+</dependency>
   </dependencies>
 </project>
