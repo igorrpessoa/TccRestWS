@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao {
-   public User getAllUsers(){
+   public List<User> getAllUsers(){
       List<User> userList = null;
       User user = null;
       try {
@@ -43,19 +43,10 @@ public class UserDao {
           
           userList = new ArrayList<User>();
          
-          saveUserList(userList);		
-
       } catch (Exception e) {
          e.printStackTrace();
       }
-      return user;
+      return userList;
    }
 
-   private void saveUserList(List<User> userList){
-      try {
-    	  
-      } catch (Exception e) {
-         e.printStackTrace();
-      } 
-   }   
 }

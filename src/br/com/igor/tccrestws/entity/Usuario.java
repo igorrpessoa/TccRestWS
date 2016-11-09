@@ -15,16 +15,16 @@ public class Usuario {
 		this.perfil = perfil;
 	}
 	
-	private int id;
+	private Integer id;
 	private String nome;
 	private String email;
 	private String senha;
 	private Perfil perfil;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getNome() {

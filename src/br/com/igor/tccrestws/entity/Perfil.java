@@ -2,33 +2,34 @@ package br.com.igor.tccrestws.entity;
 
 public class Perfil {
 
-	private double naturezaSaude;
-	private double humanaSocial;
-	private double educacaoConhecimento;
-	private double culturaCriatividade;
+	private Integer id;
+	private Double naturezaSaude;
+	private Double humanaSocial;
+	private Double educacaoConhecimento;
+	private Double culturaCriatividade;
 	
-	public double getNaturezaSaude() {
+	public Double getNaturezaSaude() {
 		return naturezaSaude;
 	}
-	public void setNaturezaSaude(double naturezaSaude) {
+	public void setNaturezaSaude(Double naturezaSaude) {
 		this.naturezaSaude = naturezaSaude;
 	}
-	public double getHumanaSocial() {
+	public Double getHumanaSocial() {
 		return humanaSocial;
 	}
-	public void setHumanaSocial(double humanaSocial) {
+	public void setHumanaSocial(Double humanaSocial) {
 		this.humanaSocial = humanaSocial;
 	}
-	public double getEducacaoConhecimento() {
+	public Double getEducacaoConhecimento() {
 		return educacaoConhecimento;
 	}
-	public void setEducacaoConhecimento(double educacaoConhecimento) {
+	public void setEducacaoConhecimento(Double educacaoConhecimento) {
 		this.educacaoConhecimento = educacaoConhecimento;
 	}
-	public double getCulturaCriatividade() {
+	public Double getCulturaCriatividade() {
 		return culturaCriatividade;
 	}
-	public void setCulturaCriatividade(double culturaCriatividade) {
+	public void setCulturaCriatividade(Double culturaCriatividade) {
 		this.culturaCriatividade = culturaCriatividade;
 	}
 	
