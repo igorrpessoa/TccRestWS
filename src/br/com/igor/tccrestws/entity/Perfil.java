@@ -2,36 +2,69 @@ package br.com.igor.tccrestws.entity;
 
 public class Perfil {
 
+	public static final String ID = "id";
+	public static final String SAUDE = "saude";
+	public static final String SOCIAL = "social";
+	public static final String INTELECTO = "intelecto";
+	public static final String ARTISTICO = "artistico";
+	
 	private Integer id;
-	private Double naturezaSaude;
-	private Double humanaSocial;
-	private Double educacaoConhecimento;
-	private Double culturaCriatividade;
+	private Double saude;
+	private Double social;
+	private Double intelecto;
+	private Double artistico;
 	
-	public Double getNaturezaSaude() {
-		return naturezaSaude;
+	public Perfil(){};
+	public Perfil(Integer id){
+		this.id = id;
+	};
+
+	public Perfil(Integer id, Double saude, Double social, Double intelecto,
+			Double artistico) {
+		super();
+		this.id = id;
+		this.saude = saude;
+		this.social = social;
+		this.intelecto = intelecto;
+		this.artistico = artistico;
 	}
-	public void setNaturezaSaude(Double naturezaSaude) {
-		this.naturezaSaude = naturezaSaude;
+	public Integer getId() {
+		return id;
 	}
-	public Double getHumanaSocial() {
-		return humanaSocial;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public void setHumanaSocial(Double humanaSocial) {
-		this.humanaSocial = humanaSocial;
+
+	public Double getSaude() {
+		return saude;
 	}
-	public Double getEducacaoConhecimento() {
-		return educacaoConhecimento;
+
+	public void setSaude(Double saude) {
+		this.saude = saude;
 	}
-	public void setEducacaoConhecimento(Double educacaoConhecimento) {
-		this.educacaoConhecimento = educacaoConhecimento;
+
+	public Double getSocial() {
+		return social;
 	}
-	public Double getCulturaCriatividade() {
-		return culturaCriatividade;
+
+	public void setSocial(Double social) {
+		this.social = social;
 	}
-	public void setCulturaCriatividade(Double culturaCriatividade) {
-		this.culturaCriatividade = culturaCriatividade;
+
+	public Double getIntelecto() {
+		return intelecto;
 	}
-	
+
+	public void setIntelecto(Double intelecto) {
+		this.intelecto = intelecto;
+	}
+
+	public Double getArtistico() {
+		return artistico;
+	}
+
+	public void setArtistico(Double artistico) {
+		this.artistico = artistico;
+	}
 	
 }

@@ -1,22 +1,19 @@
 package br.com.igor.tccrestws.entity;
 
-public class Atividade {
-
+public class Complemento {
+	
 	public static final String ID = "id";
 	public static final String NOME = "nome";
-	public static final String PERFIL_ID = "perfil_id";
-
-	public Atividade(){}
-	public Atividade(int id, String nome,Perfil perfil) {
+	
+	public Complemento(){}
+	public Complemento(int id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.perfil = perfil;
 	}
 	private Integer id;
 	private String nome;
-	private Perfil perfil;
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -29,11 +26,4 @@ public class Atividade {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Perfil getPerfil() {
-		return perfil;
-	}
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
-	}
-	
 }

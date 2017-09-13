@@ -10,16 +10,16 @@ import java.util.List;
 import com.mysql.jdbc.PreparedStatement;
 
 import br.com.igor.tccrestws.ConexaoMySQL;
-import br.com.igor.tccrestws.entity.Atividade;
+import br.com.igor.tccrestws.entity.Complemento;
 import br.com.igor.tccrestws.entity.Perfil;
 import br.com.igor.tccrestws.entity.Usuario;
 
-public class AtividadeDao {
+public class ComplementoDao {
 
 	private ConexaoMySQL conMySQL = new ConexaoMySQL();
 	
-	public Atividade selectAtividade(Atividade filtro){
-	      Atividade atividade = null;
+	public Complemento selectComplemento(Complemento filtro){
+	      Complemento complemento = null;
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
@@ -28,10 +28,9 @@ public class AtividadeDao {
 	    	  stmt.setString(1,filtro.getNome());
 	    	  ResultSet rs = stmt.executeQuery();	          
 	          while(rs.next()){
-	        	 Integer id  = rs.getInt(Atividade.ID);
-	             String nome = rs.getString(Atividade.NOME);
-	             Integer perfilId = rs.getInt(Atividade.PERFIL_ID);
-	             atividade = new Atividade(id, nome,new Perfil(perfilId));
+	        	 Integer id  = rs.getInt(Complemento.ID);
+	             String nome = rs.getString(Complemento.NOME);
+	             complemento = new Complemento(id, nome);
 	          }
 	          rs.close();
 	          stmt.close();
@@ -40,30 +39,43 @@ public class AtividadeDao {
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }
-	      return atividade;
+	      return complemento;
 	   }
 
-	public Atividade salvarAtividade(Atividade filtro){
+	public List<Complemento> salvarComplementos(List<Complemento> filtro){
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
-	    	  sql = "INSERT INTO ATIVIDADE(NOME";
+	    	  sql = "INSERT INTO COMPLEMENTO(NOME";
 	    	  sql += ") VALUES (?)";
 	         
 	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
-	    	  stmt.setString(1,filtro.getNome());
-	    	  
-	    	  int affectedRows = stmt.executeUpdate();
+//	          Statement stmt2 = conn.createStatement();
+
+	    	  for (Complemento n : filtro)
+	    	    {
+	    		  stmt.setString(1,n.getNome());
+//	    		  ResultSet rs = stmt.executeUpdate("SELECT LAST_INSERT_ID() as last_id");           // the INSERT happens here
+//	    		  n.setId(Integer.valueOf(rs.getString("last_id")));
+	    		  stmt.addBatch();  
+
+	    	    }
+	    	  int[] valores = stmt.executeBatch();  
+
+//	    	  int affectedRows = stmt.executeUpdate();
+	          for (int i =0;i<filtro.size();i++) {
+	        	  if(valores[i] == 0){
+	        		  throw new SQLException("Creating user failed, no rows affected.");
+	        	  }
+	          }
 	    	  try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	              int i =0;
 	    		  if (generatedKeys.next()) {
-	            	  filtro.setId((int)generatedKeys.getLong(1));
+	            	  filtro.get(i).setId((int)generatedKeys.getLong(1));
 	              }
 	              else {
 	                  throw new SQLException("Creating user failed, no ID obtained.");
 	              }
-	          }
-	          if (affectedRows == 0) {
-	              throw new SQLException("Creating user failed, no rows affected.");
 	          }
 	          stmt.close();
 	          conn.close();
@@ -75,21 +87,20 @@ public class AtividadeDao {
 	   }
 
 	
-	public List<Atividade> selectAllAtividade(Atividade filtro){
-	      Atividade atividade = null;
-	      List<Atividade> list = new ArrayList<>();
+	public List<Complemento> selectAllComplemento(Complemento filtro){
+	      Complemento complemento = null;
+	      List<Complemento> list = new ArrayList<>();
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
-	          sql = "SELECT * FROM ATIVIDADE AS A INNER JOIN PERFIL AS P ON A.PERFIL_ID = P.ID";
+	          sql = "SELECT * FROM COMPLEMENTO";
 	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
 	    	  ResultSet rs = stmt.executeQuery();	          
 	          while(rs.next()){
-	        	 Integer id  = rs.getInt(Atividade.ID);
-	             String nome = rs.getString(Atividade.NOME);	        
-	        	 Integer perfilId  = rs.getInt(Atividade.PERFIL_ID);
-	        	 atividade = new Atividade(id, nome,new Perfil(perfilId));
-	             list.add(atividade);
+	        	 Integer id  = rs.getInt(Complemento.ID);
+	             String nome = rs.getString(Complemento.NOME);	        
+	             complemento = new Complemento(id, nome);
+	             list.add(complemento);
 	          }
 	          rs.close();
 	          stmt.close();

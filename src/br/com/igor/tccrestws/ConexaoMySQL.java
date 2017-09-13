@@ -13,8 +13,7 @@ public class ConexaoMySQL {
 //Método Construtor da Classe//
      public ConexaoMySQL() {
     }
- 
-  
+
  
 	//Método de Conexão//
 	public static Connection getConexaoMySQL() throws InstantiationException, IllegalAccessException {

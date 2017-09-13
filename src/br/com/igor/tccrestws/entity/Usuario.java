@@ -6,15 +6,28 @@ public class Usuario {
 	public static final String EMAIL = "email";
 	public static final String PERFIL = "perfil_id";
 	public static final String SENHA = "senha";
-
-	public Usuario(int id,String nome,String email,String senha,Perfil perfil){
-		this.id = id;
+	
+	public Usuario(){
+		
+	}
+	public Usuario(String nome,String email,String senha,Perfil perfil){
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.perfil = perfil;
 	}
 	
+	
+	public Usuario(Integer id, String nome, String email, String senha, Perfil perfil) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
+		this.perfil = perfil;
+	}
+
+
 	private Integer id;
 	private String nome;
 	private String email;
@@ -51,7 +64,4 @@ public class Usuario {
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
 	}
-	
-	
-
 }
