@@ -10,6 +10,7 @@ import java.util.List;
 import com.mysql.jdbc.PreparedStatement;
 
 import br.com.igor.tccrestws.ConexaoMySQL;
+import br.com.igor.tccrestws.entity.Atividade;
 import br.com.igor.tccrestws.entity.Complemento;
 import br.com.igor.tccrestws.entity.Perfil;
 import br.com.igor.tccrestws.entity.Usuario;
@@ -20,17 +21,50 @@ public class ComplementoDao {
 	
 	public Complemento selectComplemento(Complemento filtro){
 	      Complemento complemento = null;
+	      Integer contador = 0;
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
-	    	  String sql;
-	          sql = "SELECT * FROM ATIVIDADE WHERE ID = ??";
-	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
-	    	  stmt.setString(1,filtro.getNome());
+	    	  String sql,where="";
+	          sql = "SELECT * FROM COMPLEMENTO"; 
+	          if(filtro.getId()!=null){
+    			  where +=" WHERE ID = ?";
+    		  }
+    		  if(filtro.getNome()!=null && !filtro.getNome().isEmpty() && !filtro.getNome().equals("")){
+	        	  if(where != null && !where.isEmpty()){
+    				  where+=" AND";
+    			  }else{
+    				  where+= " WHERE";
+    			  }
+    			  where+=" NOME = ?";
+	          }
+	          if(filtro.getValido() != null){
+	        	  if(where != null && !where.isEmpty()){
+    				  where+=" AND";
+    			  }else{
+    				  where+= " WHERE";
+    			  }
+    			  where+=" VALIDO = ?";
+	          }
+    		  sql += where;
+    		  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  if(filtro.getId() != null){
+	    		  contador++;
+	    		  stmt.setInt(contador,filtro.getId());
+	    	  }
+    		  if(filtro.getNome()!=null && !filtro.getNome().isEmpty() && !filtro.getNome().equals("")){
+	    		  contador++;
+	    		  stmt.setString(contador,filtro.getNome());
+	    	  }
+	    	  if(filtro.getValido() != null){
+	    		  contador++;
+	    		  stmt.setInt(contador,filtro.getValido());
+	    	  }
 	    	  ResultSet rs = stmt.executeQuery();	          
 	          while(rs.next()){
 	        	 Integer id  = rs.getInt(Complemento.ID);
 	             String nome = rs.getString(Complemento.NOME);
-	             complemento = new Complemento(id, nome);
+	        	 Integer valido  = rs.getInt(Complemento.VALIDO);
+	        	 complemento = new Complemento(id, nome,valido);
 	          }
 	          rs.close();
 	          stmt.close();
@@ -68,10 +102,11 @@ public class ComplementoDao {
 	        		  throw new SQLException("Creating user failed, no rows affected.");
 	        	  }
 	          }
+              int i =0;
 	    	  try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-	              int i =0;
 	    		  if (generatedKeys.next()) {
 	            	  filtro.get(i).setId((int)generatedKeys.getLong(1));
+	            	  i++;
 	              }
 	              else {
 	                  throw new SQLException("Creating user failed, no ID obtained.");
@@ -110,5 +145,36 @@ public class ComplementoDao {
 	         e.printStackTrace();
 	      }
 	      return list;
+	   }
+	
+	public Complemento salvarComplemento(Complemento filtro){
+	      try {
+	    	  Connection conn = conMySQL.getConexaoMySQL();
+	    	  String sql;
+	    	  sql = "INSERT INTO COMPLEMENTO(NOME";
+	    	  sql += ") VALUES (?)";
+	         
+	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
+	    	  stmt.setString(1,filtro.getNome());
+	    	  
+	    	  int affectedRows = stmt.executeUpdate();
+	    	  try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	    		  if (generatedKeys.next()) {
+	            	  filtro.setId((int)generatedKeys.getLong(1));
+	              }
+	              else {
+	                  throw new SQLException("Creating user failed, no ID obtained.");
+	              }
+	          }
+	          if (affectedRows == 0) {
+	              throw new SQLException("Creating user failed, no rows affected.");
+	          }
+	          stmt.close();
+	          conn.close();
+	       	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return filtro;
 	   }
 }

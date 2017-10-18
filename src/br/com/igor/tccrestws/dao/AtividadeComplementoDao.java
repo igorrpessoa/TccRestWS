@@ -86,9 +86,8 @@ public class AtividadeComplementoDao {
 
 	        	 Integer atividadeId  = rs.getInt("A."+Atividade.ID);
 	        	 String atividadeNome = rs.getString("A."+Atividade.NOME);
-	        	 Integer perfilId  = rs.getInt("A."+Atividade.PERFIL_ID);
 
-	             atividadeComplemento = new AtividadeComplemento(new Atividade(atividadeId,atividadeNome,new Perfil(perfilId)), new Complemento(complementoId,complementoNome));
+	             atividadeComplemento = new AtividadeComplemento(new Atividade(atividadeId,atividadeNome), new Complemento(complementoId,complementoNome));
 	             list.add(atividadeComplemento);
 	          }
 	          rs.close();

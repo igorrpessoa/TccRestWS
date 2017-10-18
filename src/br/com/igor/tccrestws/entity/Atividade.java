@@ -4,19 +4,25 @@ public class Atividade {
 
 	public static final String ID = "id";
 	public static final String NOME = "nome";
-	public static final String PERFIL_ID = "perfil_id";
+	public static final String VALIDO = "valido";
 
 	public Atividade(){}
-	public Atividade(int id, String nome,Perfil perfil) {
+	public Atividade(int id, String nome,Integer valido) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.perfil = perfil;
+		this.valido = valido;
 	}
+	public Atividade(int id, String nome) {
+		super();
+		this.id = id;
+		this.nome = nome;
+	}
+	
 	private Integer id;
 	private String nome;
-	private Perfil perfil;
-
+	private Integer valido;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -29,11 +35,12 @@ public class Atividade {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Perfil getPerfil() {
-		return perfil;
+	public Integer getValido() {
+		return valido;
 	}
-	public void setPerfil(Perfil perfil) {
-		this.perfil = perfil;
+	public void setValido(Integer valido) {
+		this.valido = valido;
 	}
+	
 	
 }

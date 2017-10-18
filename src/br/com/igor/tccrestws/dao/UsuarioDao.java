@@ -24,7 +24,7 @@ public class UsuarioDao {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
 	          sql = "SELECT * FROM USUARIO ";
-	          sql += "AS U INNER JOIN PERFIL AS P ON U.PERFIL_ID=P.ID WHERE U.EMAIL = ?";
+	          sql += "AS U LEFT JOIN PERFIL AS P ON U.PERFIL_ID=P.ID WHERE U.EMAIL = ?";
 	    	 
 	          PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
 	    	  stmt.setString(1,filtro.getEmail());
@@ -70,13 +70,44 @@ public class UsuarioDao {
 	    		  sql += ") VALUES (?,?,?)";
 	    	  }
 	         
-	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
 	    	  stmt.setString(1,usuario.getNome());
 	    	  stmt.setString(2,usuario.getEmail());
 	    	  stmt.setString(3,usuario.getSenha());
 	    	  if(usuario.getPerfil() != null){
-	    		  stmt.setInt(5,usuario.getPerfil().getId());
+	    		  stmt.setInt(4,usuario.getPerfil().getId());
 	    	  }
+	    	  int affectedRows = stmt.executeUpdate();
+	    	  try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	    		  if (generatedKeys.next()) {
+	    			  usuario.setId((int)generatedKeys.getLong(1));
+	              }
+	              else {
+	                  throw new SQLException("Creating user failed, no ID obtained.");
+	              }
+	          }
+	    	  if (affectedRows == 0) {
+	              throw new SQLException("Creating user failed, no rows affected.");
+	          }
+	          stmt.close();
+	          conn.close();
+	          	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return usuario;
+	   }
+	
+	public Usuario updateUsuario(Usuario usuario){
+	      try {
+	    	  Connection conn = conMySQL.getConexaoMySQL();
+	    	  String sql;
+	    	  sql = "UPDATE USUARIO SET NOME=?,SENHA=?,PERFIL_ID= ? WHERE EMAIL = ?";
+	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  stmt.setString(1,usuario.getNome());
+	    	  stmt.setString(2,usuario.getSenha());
+	    	  stmt.setInt(3,usuario.getPerfil().getId());
+	    	  stmt.setString(4,usuario.getEmail());
 	    	  int affectedRows = stmt.executeUpdate();
 	          if (affectedRows == 0) {
 	              throw new SQLException("Creating user failed, no rows affected.");

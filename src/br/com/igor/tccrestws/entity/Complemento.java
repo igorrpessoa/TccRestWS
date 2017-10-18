@@ -4,16 +4,24 @@ public class Complemento {
 	
 	public static final String ID = "id";
 	public static final String NOME = "nome";
-	
+	public static final String VALIDO = "valido";
+
 	public Complemento(){}
-	public Complemento(int id, String nome) {
+	public Complemento(Integer id, String nome,Integer valido) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.valido = valido;
+	}
+	public Complemento(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
 	}
 	private Integer id;
 	private String nome;
-	
+	private Integer valido;
+
 	public Integer getId() {
 		return id;
 	}
@@ -26,4 +34,11 @@ public class Complemento {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	public Integer getValido() {
+		return valido;
+	}
+	public void setValido(Integer valido) {
+		this.valido = valido;
+	}
+	
 }

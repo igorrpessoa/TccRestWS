@@ -1,5 +1,7 @@
 package br.com.igor.tccrestws.entity;
 
+import java.util.List;
+
 public class AtividadeComplemento {
 
 	public static final String ID = "id";

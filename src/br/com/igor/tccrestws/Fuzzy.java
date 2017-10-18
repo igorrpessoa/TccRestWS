@@ -15,13 +15,12 @@ public class Fuzzy {
 	public static Perfil executaFuzzy(UsuarioAtividade ua){
 		String filename = "D:/JavaProjects/TccRestWS/src/br/com/igor/tccrestws/area_classif.fcl";
 		FIS fis = FIS.load(filename, true);
-
+		Perfil retorno = null;
 		if (fis == null) {
 			System.err.println("Can't load file: '" + filename + "'");
 //			System.exit(1);
 		}
 		
-		Perfil retorno = ua.getAtividade().getPerfil();
 
 		// Get default function block
 		FunctionBlock fb = fis.getFunctionBlock(null);
@@ -77,23 +76,28 @@ public class Fuzzy {
 //					break;
 //				}
 //			}
-			retorno = aplicaFuncao(retorno, fb.getVariable("relacao").getValue());
-//		}
+		if(ua.getUsuario().getPerfil() != null && ua.getUsuario().getPerfil().getId() != null && ua.getUsuario().getPerfil().getId() >0){
+			retorno = aplicaFuncao(ua.getUsuario().getPerfil(), fb.getVariable("relacao").getValue());
+		}else{
+			Perfil novoPerfil = ua.getPerfil();
+			novoPerfil.setId(0);
+			retorno = aplicaFuncao(novoPerfil, fb.getVariable("relacao").getValue());
+		}
 		//fb.getVariable("areaPerfil").chartDefuzzifier(true);
 
 		
 		// Print ruleSet
 		//System.out.println(fb);
-		System.out.println("Area Perfil: " + fb.getVariable("areaPerfil").getValue());
+//		System.out.println("Area Perfil: " + fb.getVariable("areaPerfil").getValue());
 		return retorno;
 	}
 	
 	//TODO verificar qual a função em cima do perfil já existente
 	public static Perfil aplicaFuncao(Perfil aux,Double relacao){
-		aux.setArtistico(relacao*aux.getArtistico()/2);
-		aux.setIntelecto(relacao*aux.getIntelecto()/2);
-		aux.setSocial(relacao*aux.getSocial()/2);
-		aux.setSaude(relacao*aux.getSaude()/2);
+		aux.setArtistico((relacao+aux.getArtistico())/2);
+		aux.setIntelecto((relacao+aux.getIntelecto())/2);
+		aux.setSocial((relacao+aux.getSocial())/2);
+		aux.setSaude((relacao+aux.getSaude())/2);
 
 		return aux;
 	}

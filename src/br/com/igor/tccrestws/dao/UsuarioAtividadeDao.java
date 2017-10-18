@@ -30,11 +30,15 @@ public class UsuarioAtividadeDao {
 	        		+  "UA." +UsuarioAtividade.FREQUENCIA + ","
 	        		+  "UA." +UsuarioAtividade.SATISFACAO + ","
 	        		+  "UA." +UsuarioAtividade.ATIVIDADE + ","
-	        		+  "UA." +UsuarioAtividade.DESCRICAO + ","
+	        		+  "UA." +UsuarioAtividade.PERFIL + ","
+	        		+  "P." +Perfil.ARTISTICO + ","
+	        		+  "P." +Perfil.INTELECTO + ","
+	        		+  "P." +Perfil.SOCIAL + ","	        		
+	        		+  "P." +Perfil.SAUDE + ","
 	        		+  "A." +Atividade.NOME
 	        		+ " FROM USUARIO_ATIVIDADE UA INNER JOIN USUARIO U ON UA.USUARIO_ID=U.ID"
 	        		+ " INNER JOIN ATIVIDADE A ON UA.ATIVIDADE_ID = A.ID"
-	        		+ " INNER JOIN PERFIL P ON A.PERFIL_ID = P.ID"
+	        		+ " INNER JOIN PERFIL P ON UA.PERFIL_ID = P.ID"
 	        		+ " WHERE U.EMAIL = ?";
 	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
 	    	  stmt.setString(1,filtro.getEmail());
@@ -44,17 +48,17 @@ public class UsuarioAtividadeDao {
 	             Double frequencia = rs.getDouble("UA."+UsuarioAtividade.FREQUENCIA);
 	             Double satisfacao = rs.getDouble("UA."+UsuarioAtividade.SATISFACAO);	             
 	             Integer atividadeId = rs.getInt(UsuarioAtividade.ATIVIDADE);
-	             String descricao = rs.getString(UsuarioAtividade.DESCRICAO);
              
-	             int perfilId  = rs.getInt("P."+Perfil.ID);
+	             int perfilId  = rs.getInt("UA."+UsuarioAtividade.PERFIL);
 	             Double artistico = rs.getDouble("P."+Perfil.ARTISTICO);	             
 	             Double intelecto = rs.getDouble("P."+Perfil.INTELECTO);	             
 	             Double saude = rs.getDouble("P."+Perfil.SAUDE);	             
 	             Double social = rs.getDouble("P."+Perfil.SOCIAL);	             
 
 	             String nomeAtividade = rs.getString(Atividade.NOME);
-	             Atividade atividade = new Atividade(atividadeId, nomeAtividade, new Perfil(perfilId,saude,social,intelecto,artistico));
-	             
+//	             Atividade atividade = new Atividade(atividadeId, nomeAtividade, new Perfil(perfilId,saude,social,intelecto,artistico));
+	             Atividade atividade = new Atividade(atividadeId, nomeAtividade);
+
 	             retorno.add(atividade);
 	          }
 	          rs.close();
@@ -71,14 +75,15 @@ public class UsuarioAtividadeDao {
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
-	    	  sql = "INSERT INTO USUARIO_ATIVIDADE(USUARIO_ID,ATIVIDADE_ID,FREQUENCIA,SATISFACAO)";
-	    	  sql +=" VALUES (?,?,?,?)";
+	    	  sql = "INSERT INTO USUARIO_ATIVIDADE(USUARIO_ID,ATIVIDADE_ID,PERFIL_ID,FREQUENCIA,SATISFACAO)";
+	    	  sql +=" VALUES (?,?,?,?,?)";
 		    	   
 	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
 	    	  stmt.setInt(1,usuarioAtividade.getUsuario().getId());
 	    	  stmt.setInt(2,usuarioAtividade.getAtividade().getId());
-	    	  stmt.setDouble(3,usuarioAtividade.getFrequencia());
-	    	  stmt.setDouble(4,usuarioAtividade.getSatisfacao());	    	
+	    	  stmt.setInt(3,usuarioAtividade.getPerfil().getId());
+	    	  stmt.setDouble(4,usuarioAtividade.getFrequencia());
+	    	  stmt.setDouble(5,usuarioAtividade.getSatisfacao());	    	
 	    	  int affectedRows = stmt.executeUpdate();
 	          if (affectedRows == 0) {
 	              throw new SQLException("Creating user failed, no rows affected.");

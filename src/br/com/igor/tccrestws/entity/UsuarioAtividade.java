@@ -7,17 +7,16 @@ public class UsuarioAtividade {
 	public static final String ATIVIDADE = "atividade_id";
 	public static final String FREQUENCIA = "frequencia";
 	public static final String SATISFACAO = "satisfacao";
-	public static final String DESCRICAO = "descricao";
-	
+	public static final String PERFIL = "perfil_id";
+
 	public UsuarioAtividade(){}
 	
-	public UsuarioAtividade(Integer id, Usuario usuario, Atividade atividade, Double frequencia, Double satisfacao,String descricao) {
+	public UsuarioAtividade(Integer id, Usuario usuario, Atividade atividade, Double frequencia, Double satisfacao) {
 		this.id = id;
 		this.usuario = usuario;
 		this.atividade = atividade;
 		this.frequencia = frequencia;
 		this.satisfacao = satisfacao;
-		this.descricao = descricao;
 	}
 	
 	private Integer id;
@@ -25,8 +24,8 @@ public class UsuarioAtividade {
 	private Atividade atividade;
 	private Double frequencia;
 	private Double satisfacao;
-	private String descricao;
-
+	private Perfil perfil;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -58,13 +57,13 @@ public class UsuarioAtividade {
 		this.satisfacao = satisfacao;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public Perfil getPerfil() {
+		return perfil;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
-
+	
 	
 }

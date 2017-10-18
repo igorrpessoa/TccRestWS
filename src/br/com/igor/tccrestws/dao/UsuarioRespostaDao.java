@@ -39,9 +39,8 @@ public class UsuarioRespostaDao {
 	             int id  = rs.getInt(UsuarioResposta.ID);
 	             String resposta = rs.getString(UsuarioResposta.RESPOSTA);
 	             Integer atividadeId = rs.getInt("UA."+UsuarioAtividade.ATIVIDADE);
-	             String descricao = rs.getString("UA."+UsuarioAtividade.DESCRICAO);         
              
-	             retorno.add(new UsuarioResposta(id,new UsuarioAtividade(atividadeId,null,null,null,null,descricao),resposta));
+	             retorno.add(new UsuarioResposta(id,new UsuarioAtividade(atividadeId,null,null,null,null),resposta));
 	          }
 	          rs.close();
 	          stmt.close();
