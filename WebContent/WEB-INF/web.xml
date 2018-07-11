@@ -27,4 +27,8 @@
           <servlet-name>jersey-servlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+    
+    <listener>
+   <listener-class>br.com.igor.tccrestws.Listener</listener-class>
+</listener>
 </web-app>

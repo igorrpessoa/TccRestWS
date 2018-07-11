@@ -13,6 +13,7 @@ public class AtividadeVo {
 		atividade =a;
 		complementos = c;
 	}
+	
 	private Atividade atividade;
 	private List<Complemento> complementos;
 	private Integer valido;

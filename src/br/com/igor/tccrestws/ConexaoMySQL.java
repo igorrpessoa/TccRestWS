@@ -28,11 +28,10 @@ public class ConexaoMySQL {
 	// Configurando a nossa conexão com um banco de dados// 
 	        String serverName = "localhost";    //caminho do servidor do BD
 	        String mydatabase = "mydb";        //nome do seu banco de dados
-	        String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
+	        String url = "jdbc:mysql://" + serverName + "/" + mydatabase + "?useSSL=false";
 	        String username = "root";        //nome de um usuário de seu BD      
 	        String password = "tccsucesso";      //sua senha de acesso
 	        connection = DriverManager.getConnection(url, username, password);
-	        
 	        //Testa sua conexão//
 	        if (connection != null) {
 	            status = ("STATUS--->Conectado com sucesso!");

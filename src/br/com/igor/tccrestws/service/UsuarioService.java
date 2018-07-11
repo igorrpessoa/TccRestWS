@@ -43,6 +43,8 @@ public class UsuarioService {
 	   Gson gson = new Gson();
 	   Usuario u = gson.fromJson(usuario,Usuario.class);
 	   try{
+		   u.setEmail(u.getEmail());
+		   u.setNome(u.getNome());
 		   u.setSenha(Util.sha256(u.getSenha()));
 	   }
 	   catch (Exception e) {

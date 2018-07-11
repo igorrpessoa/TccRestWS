@@ -14,10 +14,13 @@ import com.google.gson.Gson;
 
 import br.com.igor.tccrestws.dao.AtividadeDao;
 import br.com.igor.tccrestws.dao.ComplementoDao;
+import br.com.igor.tccrestws.dao.UsuarioAtividadeDao;
 import br.com.igor.tccrestws.entity.Atividade;
 import br.com.igor.tccrestws.entity.Complemento;
+import br.com.igor.tccrestws.entity.Perfil;
 import br.com.igor.tccrestws.entity.Usuario;
 import br.com.igor.tccrestws.vo.AtividadeVo;
+import br.com.igor.tccrestws.vo.UsuarioAtividadeVo;
 
 @Path("/AtividadeService")
 public class AtividadeService {
@@ -97,10 +100,10 @@ public class AtividadeService {
    }
    	
    	private AtividadeVo filtraAtividadeComplemento(AtividadeVo vo){
-    	vo.getAtividade().setNome(vo.getAtividade().getNome().replaceAll("[^a-zA-Z0-9]+","").toLowerCase());
+    	vo.getAtividade().setNome(vo.getAtividade().getNome().replaceAll("[^a-z A-Z0-9]+","").toLowerCase());
     	List<Complemento> lista = vo.getComplementos();
     	for(int i=0;i<lista.size();i++){ 
-    		vo.getComplementos().get(i).setNome(lista.get(i).getNome().replaceAll("[^a-zA-Z0-9]+","").toLowerCase()); 
+    		vo.getComplementos().get(i).setNome(lista.get(i).getNome().replaceAll("[^a-z A-Z0-9]+","").toLowerCase()); 
     	}
     	return vo;
     }
@@ -114,13 +117,26 @@ public class AtividadeService {
    public String sugestaoAtividade(String filtro){
 	   Gson gson = new Gson();
 	   Usuario filtroUsuario = gson.fromJson(filtro, Usuario.class);
-	   List<AtividadeVo> atividades = dao.selectAllAtividadeSugestao(filtroUsuario);
-	   String userJSONString = gson.toJson(selecionaAtividadeRandom(atividades));
+	   List<UsuarioAtividadeVo> atividades = listaAtividades(filtroUsuario);
+	   String userJSONString = gson.toJson(selecionaAtividade(filtroUsuario,atividades));
 	   return userJSONString;
    }
     
+    private List<UsuarioAtividadeVo> listaAtividades(Usuario filtroUsuario){
+	   float porcentagem = 0.15f;
+	   List<UsuarioAtividadeVo> atividades = null;
+ 	   while(porcentagem <= 0.50f){
+ 		   atividades = dao.selectAllAtividadeSugestao(filtroUsuario,porcentagem);
+ 		   if(atividades != null && atividades.size()==0){
+ 			  porcentagem +=0.05f;
+ 		   }else{
+ 			   break;
+ 		   }
+ 	   }
+ 	   return atividades;
+    }
     
-    private AtividadeVo selecionaAtividadeRandom(List<AtividadeVo> atividades ){
+    private UsuarioAtividadeVo selecionaAtividadeRandom(List<UsuarioAtividadeVo> atividades ){
     	if(atividades !=null && atividades.size()>0){
 	    		int index = (int)(10*Math.random())%atividades.size();
 	    		return atividades.get(index);
@@ -133,13 +149,51 @@ public class AtividadeService {
     
     
     
-    private AtividadeVo selecionaAtividadePorAfinidade(List<AtividadeVo> atividades){
+    private UsuarioAtividadeVo selecionaAtividade(Usuario u,List<UsuarioAtividadeVo> atividades){
+    	UsuarioAtividadeDao uaDao = new UsuarioAtividadeDao();
+    	UsuarioAtividadeVo maisPopular = null;
+    	UsuarioAtividadeVo selecionaAtividade = null;
     	if(atividades !=null){
-    	int index = (int)(10*Math.random())%atividades.size();
-    	return atividades.get(index);
+        	
+    		for(UsuarioAtividadeVo vo :atividades){
+    			Integer total = uaDao.countAll();
+    			Integer quantidade = 0;
+    			if(total != null && total > 0){
+    				quantidade = uaDao.countAtividade(vo.getAtividade())/total;
+    			}
+    			vo.setPopularidade(quantidade + vo.getSatisfacao() - calcularErro(u.getPerfil(),vo.getPerfil()));
+    			if(maisPopular == null || maisPopular.getPopularidade()>vo.getPopularidade()){
+    				maisPopular = vo;
+    			}
+    		}
     	}
-    	else{
-    		return null;
+    	
+    	return maisPopular;
+    
+    }
+    
+    private Double calcularErro(Perfil original, Perfil comparado){
+    	Double erro = 0.0;
+    	if(original.getSaude() >= comparado.getSaude()){
+        	erro += original.getSaude() - comparado.getSaude();
+    	}else{
+        	erro += comparado.getSaude() - original.getSaude();
     	}
+    	if(original.getSocial() >= comparado.getSocial()){
+        	erro += original.getSocial() - comparado.getSocial();
+    	}else{
+        	erro += comparado.getSocial() - original.getSocial();
+    	}
+    	if(original.getIntelecto() >= comparado.getIntelecto()){
+        	erro += original.getIntelecto() - comparado.getIntelecto();
+    	}else{
+        	erro += comparado.getIntelecto() - original.getIntelecto();
+    	}
+    	if(original.getArtistico() >= comparado.getArtistico()){
+        	erro += original.getArtistico() - comparado.getArtistico();
+    	}else{
+        	erro += comparado.getArtistico() - original.getArtistico();
+    	}
+    	return erro;
     }
 }

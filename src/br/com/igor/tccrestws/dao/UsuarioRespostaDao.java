@@ -30,7 +30,8 @@ public class UsuarioRespostaDao {
 	        		+  "UR." +UsuarioResposta.RESPOSTA + ","
 	        		+  "UR." +UsuarioResposta.USUARIO_ATIVIDADE + ","	    
 	        		+ " FROM USUARIO_RESPOSTA UR INNER JOIN USUARIO U ON UA.USUARIO_ID=U.ID"
-	        		+ " INNER JOIN ATIVIDADE A ON UA.ATIVIDADE_ID = A.ID"
+	        		+ " INNER JOIN ATIVIDADE_COMPLEMENTO AC ON UA.ATIVIDADE_COMPLEMENTO_ID = AC.ID"
+	        		+ " INNER JOIN ATIVIDADE A ON UC.ATIVIDADE_ID = A.ID"
 	        		+ "WHERE U.EMAIL = ?";
 	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
 	    	  stmt.setString(1,filtro.getUsuarioAtividade().getUsuario().getEmail());
@@ -38,9 +39,9 @@ public class UsuarioRespostaDao {
 	          while(rs.next()){
 	             int id  = rs.getInt(UsuarioResposta.ID);
 	             String resposta = rs.getString(UsuarioResposta.RESPOSTA);
-	             Integer atividadeId = rs.getInt("UA."+UsuarioAtividade.ATIVIDADE);
+	             Integer atividadeId = rs.getInt("UA."+UsuarioAtividade.ATIVIDADE_COMPLEMENTO);
              
-	             retorno.add(new UsuarioResposta(id,new UsuarioAtividade(atividadeId,null,null,null,null),resposta));
+	             retorno.add(new UsuarioResposta(id,new UsuarioAtividade(atividadeId,null,null,null,null,null,null),resposta));
 	          }
 	          rs.close();
 	          stmt.close();

@@ -20,7 +20,8 @@ public class ComplementoDao {
 	private ConexaoMySQL conMySQL = new ConexaoMySQL();
 	
 	public Complemento selectComplemento(Complemento filtro){
-	      Complemento complemento = null;
+	    List<Complemento> list = new ArrayList<>(); 
+		Complemento complemento = null;
 	      Integer contador = 0;
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
@@ -124,12 +125,45 @@ public class ComplementoDao {
 	
 	public List<Complemento> selectAllComplemento(Complemento filtro){
 	      Complemento complemento = null;
+	      int contador=0;
 	      List<Complemento> list = new ArrayList<>();
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
-	    	  String sql;
-	          sql = "SELECT * FROM COMPLEMENTO";
-	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  String sql="",where="";
+	          sql = "SELECT * FROM COMPLEMENTO"; 
+	          if(filtro.getId()!=null){
+    			  where +=" WHERE ID = ?";
+    		  }
+    		  if(filtro.getNome()!=null && !filtro.getNome().isEmpty() && !filtro.getNome().equals("")){
+	        	  if(where != null && !where.isEmpty()){
+    				  where+=" AND";
+    			  }else{
+    				  where+= " WHERE";
+    			  }
+    			  where+=" NOME = ?";
+	          }
+	          if(filtro.getValido() != null){
+	        	  if(where != null && !where.isEmpty()){
+    				  where+=" AND";
+    			  }else{
+    				  where+= " WHERE";
+    			  }
+    			  where+=" VALIDO = ?";
+	          }
+    		  sql += where;
+    		  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  if(filtro.getId() != null){
+	    		  contador++;
+	    		  stmt.setInt(contador,filtro.getId());
+	    	  }
+    		  if(filtro.getNome()!=null && !filtro.getNome().isEmpty() && !filtro.getNome().equals("")){
+	    		  contador++;
+	    		  stmt.setString(contador,filtro.getNome());
+	    	  }
+	    	  if(filtro.getValido() != null){
+	    		  contador++;
+	    		  stmt.setInt(contador,filtro.getValido());
+	    	  }
 	    	  ResultSet rs = stmt.executeQuery();	          
 	          while(rs.next()){
 	        	 Integer id  = rs.getInt(Complemento.ID);

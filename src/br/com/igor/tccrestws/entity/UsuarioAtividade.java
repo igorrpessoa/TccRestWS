@@ -4,28 +4,32 @@ public class UsuarioAtividade {
 
 	public static final String ID = "id";
 	public static final String USUARIO = "usuario_id";
-	public static final String ATIVIDADE = "atividade_id";
+	public static final String ATIVIDADE_COMPLEMENTO = "atividade_complemento_id";
 	public static final String FREQUENCIA = "frequencia";
 	public static final String SATISFACAO = "satisfacao";
 	public static final String PERFIL = "perfil_id";
+	public static final String RELACAO = "relacao";
+	public static final String RESPOSTA = "resposta";
 
 	public UsuarioAtividade(){}
 	
-	public UsuarioAtividade(Integer id, Usuario usuario, Atividade atividade, Double frequencia, Double satisfacao) {
+	public UsuarioAtividade(Integer id, Usuario usuario, AtividadeComplemento atividadeComplemento, Double frequencia, Double satisfacao,Double relacao,String resposta) {
 		this.id = id;
 		this.usuario = usuario;
-		this.atividade = atividade;
+		this.atividadeComplemento = atividadeComplemento;
 		this.frequencia = frequencia;
 		this.satisfacao = satisfacao;
 	}
 	
 	private Integer id;
 	private Usuario usuario;
-	private Atividade atividade;
+	private AtividadeComplemento atividadeComplemento;
 	private Double frequencia;
 	private Double satisfacao;
 	private Perfil perfil;
-	
+	private Double relacao;
+	private String resposta;
+
 	public Integer getId() {
 		return id;
 	}
@@ -38,11 +42,11 @@ public class UsuarioAtividade {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	public Atividade getAtividade() {
-		return atividade;
+	public AtividadeComplemento getAtividadeComplemento() {
+		return atividadeComplemento;
 	}
-	public void setAtividade(Atividade atividade) {
-		this.atividade = atividade;
+	public void setAtividadeComplemento(AtividadeComplemento atividadeComplemento) {
+		this.atividadeComplemento = atividadeComplemento;
 	}
 	public Double getFrequencia() {
 		return frequencia;
@@ -63,6 +67,22 @@ public class UsuarioAtividade {
 
 	public void setPerfil(Perfil perfil) {
 		this.perfil = perfil;
+	}
+
+	public Double getRelacao() {
+		return relacao;
+	}
+
+	public void setRelacao(Double relacao) {
+		this.relacao = relacao;
+	}
+
+	public String getResposta() {
+		return resposta;
+	}
+
+	public void setResposta(String resposta) {
+		this.resposta = resposta;
 	}
 	
 	

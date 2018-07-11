@@ -21,43 +21,68 @@ public class AtividadeComplementoDao {
 	private ConexaoMySQL conMySQL = new ConexaoMySQL();
 	
 
-
-	public List<AtividadeComplemento> salvarAtividadeComplemento(List<AtividadeComplemento> filtro){
+	public AtividadeComplemento selectParAtividadeComplemento(AtividadeComplemento filtro){
+	      AtividadeComplemento atividadeComplemento = null;
 	      try {
 	    	  Connection conn = conMySQL.getConexaoMySQL();
 	    	  String sql;
-	    	  sql = "INSERT INTO ATIVIDADE_COMPLEMENTO(ATIVIDADE_ID,COMPLEMENTO_ID";
-	    	  sql += ") VALUES (?,?)";
-	         
-	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
-
-	    	  for (AtividadeComplemento n : filtro)
-	    	    {
-	    		  stmt.setInt(1,n.getAtividade().getId());
-	    		  stmt.setInt(2,n.getComplemento().getId());
-	    		  stmt.addBatch();  
-
-	    	    }
-	    	  int[] valores = stmt.executeBatch();  
-
-//	    	  int affectedRows = stmt.executeUpdate();
-	          for (int i =0;i<filtro.size();i++) {
-	        	  if(valores[i] == 0){
-	        		  throw new SQLException("Creating user failed, no rows affected.");
-	        	  }
+	          sql = "SELECT "
+	        		  +"AC."+ AtividadeComplemento.ATIVIDADE + ","
+	        		  +"AC."+ AtividadeComplemento.COMPLEMENTO + ","
+	        		  +"AC."+ AtividadeComplemento.ID
+	        		+ " FROM ATIVIDADE_COMPLEMENTO AC "
+	          		+ "WHERE AC.ATIVIDADE_ID = ? AND AC.COMPLEMENTO_ID = ?";
+	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql);
+	    	  stmt.setInt(1,filtro.getAtividade().getId());
+	    	  stmt.setInt(2,filtro.getComplemento().getId());
+	    	  ResultSet rs = stmt.executeQuery();	          
+	          while(rs.next()){
+	        	 Integer ativiadeComplementoId  = rs.getInt(AtividadeComplemento.ID);
+	             atividadeComplemento = filtro;
+	             atividadeComplemento.setId(ativiadeComplementoId);
 	          }
+	          rs.close();
+	          stmt.close();
+	          conn.close();
+	          	         
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return atividadeComplemento;
+	}
+
+	public AtividadeComplemento salvarAtividadeComplemento(AtividadeComplemento filtro){
+	      try {
+	    	  Connection conn = conMySQL.getConexaoMySQL();
+	    	  String sql;
+	    	  sql = "INSERT INTO ATIVIDADE_COMPLEMENTO(ATIVIDADE_ID";
+	    	  if(filtro.getComplemento() != null){
+	    		  sql += ",COMPLEMENTO_ID";
+		    	  sql += ") VALUES (?,?)";
+	    	  }else{
+		    	  sql += ") VALUES (?)";
+	    	  }
+		         
+	    	  PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS );
+	    	  stmt.setInt(1,filtro.getAtividade().getId());
+	    	  if(filtro.getComplemento() != null){
+	    		  stmt.setInt(2,filtro.getComplemento().getId());
+	    	  }
+	    	  int affectedRows = stmt.executeUpdate();
 	    	  try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-	              int i =0;
 	    		  if (generatedKeys.next()) {
-	            	  filtro.get(i).setId((int)generatedKeys.getLong(1));
+	            	  filtro.setId((int)generatedKeys.getLong(1));
 	              }
 	              else {
 	                  throw new SQLException("Creating user failed, no ID obtained.");
 	              }
 	          }
+	          if (affectedRows == 0) {
+	              throw new SQLException("Creating user failed, no rows affected.");
+	          }
 	          stmt.close();
 	          conn.close();
-	       	         
+	          
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }
@@ -65,7 +90,7 @@ public class AtividadeComplementoDao {
 	   }
 
 	
-	public List<AtividadeComplemento> selectAllAtividadeComplementoFromAtividade(Atividade filtro){
+	public List<AtividadeComplemento> selectAllAtividadeComplementoFromAtividade(AtividadeComplemento filtro){
 	      List<AtividadeComplemento> list = new ArrayList<>();
 	      AtividadeComplemento atividadeComplemento = null;
 	      try {

@@ -5,9 +5,8 @@ import java.util.List;
 public class AtividadeComplemento {
 
 	public static final String ID = "id";
-	public static final String NOME = "nome";
-	public static final String COMPLEMENTO = "complemento";
-	public static final String ATIVIDADE = "atividade";
+	public static final String COMPLEMENTO = "complemento_id";
+	public static final String ATIVIDADE = "atividade_id";
 
 	public AtividadeComplemento(){}
 	public AtividadeComplemento(Atividade atividade, Complemento complemento) {
@@ -16,7 +15,6 @@ public class AtividadeComplemento {
 		this.complemento = complemento;
 	}
 	private Integer id;
-	private String nome;
 	private Atividade atividade;
 	private Complemento complemento;
 	
@@ -25,12 +23,6 @@ public class AtividadeComplemento {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 	public Atividade getAtividade() {
 		return atividade;

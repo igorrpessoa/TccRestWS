@@ -1,10 +1,12 @@
 package br.com.igor.tccrestws;
 
+import java.io.File;
 import java.util.List;
 
 import br.com.igor.tccrestws.entity.Atividade;
 import br.com.igor.tccrestws.entity.Perfil;
 import br.com.igor.tccrestws.entity.UsuarioAtividade;
+import br.com.igor.tccrestws.vo.UsuarioAtividadeVo;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
 import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
@@ -12,10 +14,13 @@ import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 public class Fuzzy {
 	
 //	public void inicializaFuzzy(List<UsuarioAtividade> listUsuarioAtividade){
-	public static Perfil executaFuzzy(UsuarioAtividade ua){
+	public static UsuarioAtividadeVo executaFuzzy(UsuarioAtividadeVo ua){
 		String filename = "D:/JavaProjects/TccRestWS/src/br/com/igor/tccrestws/area_classif.fcl";
+
+//		String filename = "C:/apache-tomcat-8.5.28/webapps/TccRestWS/WEB-INF/classes/br/com/igor/tccrestws/area_classif.fcl";
 		FIS fis = FIS.load(filename, true);
-		Perfil retorno = null;
+		UsuarioAtividadeVo retorno = ua;
+		Perfil perfil = null;
 		if (fis == null) {
 			System.err.println("Can't load file: '" + filename + "'");
 //			System.exit(1);
@@ -25,7 +30,7 @@ public class Fuzzy {
 		// Get default function block
 		FunctionBlock fb = fis.getFunctionBlock(null);
 		
-		JFuzzyChart.get().chart(fb);
+		//JFuzzyChart.get().chart(fb);
 
 		Double areaAtiv = 0.0;
 		Double freq = 0.0;
@@ -59,7 +64,7 @@ public class Fuzzy {
 				fb.evaluate();
 		
 				// Show output variable's chart
-				fb.getVariable("relacao").defuzzify();
+				//fb.getVariable("relacao").defuzzify();
 				
 //				switch(i){
 //				case 0:
@@ -76,15 +81,16 @@ public class Fuzzy {
 //					break;
 //				}
 //			}
+		Double relacao = fb.getVariable("relacao").getValue();
 		if(ua.getUsuario().getPerfil() != null && ua.getUsuario().getPerfil().getId() != null && ua.getUsuario().getPerfil().getId() >0){
-			retorno = aplicaFuncao(ua.getUsuario().getPerfil(), fb.getVariable("relacao").getValue());
+			perfil = aplicaFuncao(ua.getPerfil(),ua.getUsuario().getPerfil(), relacao);
 		}else{
 			Perfil novoPerfil = ua.getPerfil();
 			novoPerfil.setId(0);
-			retorno = aplicaFuncao(novoPerfil, fb.getVariable("relacao").getValue());
+			perfil = aplicaFuncao(novoPerfil,relacao);
 		}
-		//fb.getVariable("areaPerfil").chartDefuzzifier(true);
-
+		retorno.setRelacao(relacao);
+		retorno.getUsuario().setPerfil(perfil);
 		
 		// Print ruleSet
 		//System.out.println(fb);
@@ -101,5 +107,13 @@ public class Fuzzy {
 
 		return aux;
 	}
+	//TODO verificar qual a função em cima do perfil já existente
+		public static Perfil aplicaFuncao(Perfil atividadePerfil, Perfil novoPerfil,Double relacao){
+			novoPerfil.setArtistico(novoPerfil.getArtistico() + (novoPerfil.getArtistico() - atividadePerfil.getArtistico())*(-relacao/100));
+			novoPerfil.setIntelecto(novoPerfil.getIntelecto() + (novoPerfil.getIntelecto() - atividadePerfil.getIntelecto())*(-relacao/100));
+			novoPerfil.setSocial( novoPerfil.getSocial() + (novoPerfil.getSocial() - atividadePerfil.getSocial())*(-relacao/100));
+			novoPerfil.setSaude(novoPerfil.getSaude() + (novoPerfil.getSaude() - atividadePerfil.getSaude())*(-relacao/100));
 
+			return novoPerfil;
+		}
 }
